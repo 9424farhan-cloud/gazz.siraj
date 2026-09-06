@@ -3,8 +3,14 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // Firebase configuration from environment variables
 // Copy your Firebase project config here or set VITE_ env vars in .env
+// Ensure valid Firebase API key (sanitizing against uppercase typo in secrets)
+const rawApiKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const apiKey = (!rawApiKey || rawApiKey.includes("DTtFQL"))
+  ? "AIzaSyASM2WzDTtFQlI0cECPX47iwHZunhnns7M"
+  : rawApiKey;
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyASM2WzDTtFQlI0cECPX47iwHZunhnns7M",
+  apiKey,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "siraj-app-871fc.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "siraj-app-871fc",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "siraj-app-871fc.firebasestorage.app",
