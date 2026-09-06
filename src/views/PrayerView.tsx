@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { prayerService } from '../services/prayerService';
 import { prayerRepository } from '../services/repositories/prayerRepository';
 import { settingsRepository } from '../services/repositories/settingsRepository';
+import { dateService, getLocalDateString } from '../services/dateService';
 import type { PrayerLog, PrayerName } from '../types';
 import { Clock, CheckCircle2, Circle, MapPin, Bell, Compass, Sparkles } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
@@ -24,7 +25,7 @@ export const PrayerView: React.FC<PrayerViewProps> = ({
   setActiveTab
 }) => {
   const { showToast } = useToast();
-  const [todayStr, setTodayStr] = useState<string>('');
+  const [todayStr, setTodayStr] = useState<string>(getLocalDateString());
   const [prayerTimes, setPrayerTimes] = useState<any>({
     subuh: '04:35',
     syuruq: '05:48',
@@ -41,9 +42,9 @@ export const PrayerView: React.FC<PrayerViewProps> = ({
   });
 
   const [prayerLog, setPrayerLog] = useState<PrayerLog>({
-    date: '',
-    subuh: true,
-    dzuhur: true,
+    date: getLocalDateString(),
+    subuh: false,
+    dzuhur: false,
     ashar: false,
     maghrib: false,
     isya: false
@@ -58,18 +59,28 @@ export const PrayerView: React.FC<PrayerViewProps> = ({
   });
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    setTodayStr(today);
+    const loadDayData = (date: string) => {
+      setTodayStr(date);
+      const times = prayerService.calculatePrayerTimes(lat, lng, new Date(), methodStr);
+      setPrayerTimes(times);
 
-    const times = prayerService.calculatePrayerTimes(lat, lng, new Date(), methodStr);
-    setPrayerTimes(times);
+      prayerRepository.getPrayerLog(date).then(log => {
+        setPrayerLog(log);
+      });
+    };
 
-    prayerRepository.getPrayerLog(today).then(log => {
-      setPrayerLog({ ...log, subuh: true, dzuhur: true });
-    });
+    const initialDate = getLocalDateString();
+    loadDayData(initialDate);
 
     settingsRepository.getSettings().then(s => {
       if (s.prayerNotifications) setNotifications(s.prayerNotifications);
+    });
+
+    // Auto-reset pukul 00:00 tengah malam
+    const unsubscribeReset = dateService.subscribe((newDate) => {
+      console.info(`[PrayerView] Auto-reset shalat harian: ${newDate}`);
+      loadDayData(newDate);
+      showToast('Hari baru! Checklist shalat 5 waktu telah di-reset 🌙', 'info');
     });
 
     const timer = setInterval(() => {
@@ -78,7 +89,10 @@ export const PrayerView: React.FC<PrayerViewProps> = ({
     }, 1000);
 
     setNextInfo(prayerService.getNextPrayerInfo(lat, lng, methodStr));
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      unsubscribeReset();
+    };
   }, [lat, lng, methodStr]);
 
   const handleTogglePrayer = async (pName: PrayerName) => {

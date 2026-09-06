@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { prayerRepository } from '../services/repositories/prayerRepository';
 import { worshipRepository } from '../services/repositories/worshipRepository';
+import { dateService, getLocalDateString } from '../services/dateService';
 import { BarChart3, Flame, Calendar, Award, TrendingUp } from 'lucide-react';
 
 export const ProgressView: React.FC = () => {
   const [totalTrackedDays, setTotalTrackedDays] = useState<number>(1);
-  const [streakDays, setStreakDays] = useState<number>(1);
-  const [bestStreakDays, setBestStreakDays] = useState<number>(1);
+  const [streakDays, setStreakDays] = useState<number>(0);
+  const [bestStreakDays, setBestStreakDays] = useState<number>(0);
   const [prayerConsistency, setPrayerConsistency] = useState<number>(0);
   const [chartData, setChartData] = useState<{ day: string; shalat: number }[]>([]);
 
   useEffect(() => {
     loadProgressData();
+    const unsubscribeReset = dateService.subscribe(() => {
+      loadProgressData();
+    });
+    return () => unsubscribeReset();
   }, []);
 
   const loadProgressData = async () => {
@@ -34,14 +39,14 @@ export const ProgressView: React.FC = () => {
       setPrayerConsistency(consistency);
 
       const completedDaysCount = prayerLogs.filter(l => l.subuh || l.dzuhur || l.ashar || l.maghrib || l.isya).length;
-      setStreakDays(Math.max(1, completedDaysCount));
-      setBestStreakDays(Math.max(1, completedDaysCount));
+      setStreakDays(completedDaysCount);
+      setBestStreakDays(completedDaysCount);
 
       const last7Days: { day: string; shalat: number }[] = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
+        const dateStr = getLocalDateString(d);
         const dayLabel = d.toLocaleDateString('id-ID', { weekday: 'short' });
 
         const log = prayerLogs.find(l => l.date === dateStr);

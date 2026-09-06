@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { CircleDot, RotateCcw, Plus, Minus, Sparkles } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { dateService, getLocalDateString } from '../services/dateService';
 
 const PRESET_DZIKIR = [
   { id: 'subhanallah', name: 'Subhanallah', arabic: 'سُبْحَانَ اللَّهِ', target: 33 },
@@ -11,7 +12,6 @@ const PRESET_DZIKIR = [
 
 /** Key localStorage untuk menyimpan data tasbih harian per dzikir */
 const getTasbihStorageKey = (dzikirId: string) => `siraj_tasbih_${dzikirId}`;
-const getTodayStr = () => new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
 
 interface TasbihDayData {
   date: string;
@@ -20,9 +20,9 @@ interface TasbihDayData {
   bestCount: number;
 }
 
-/** Ambil data harian dari localStorage, auto-reset jika sudah ganti hari */
+/** Ambil data harian dari localStorage, auto-reset jika sudah ganti hari (00:00) */
 const loadDayData = (dzikirId: string): TasbihDayData => {
-  const today = getTodayStr();
+  const today = getLocalDateString();
   const raw = localStorage.getItem(getTasbihStorageKey(dzikirId));
   if (raw) {
     try {
@@ -31,7 +31,7 @@ const loadDayData = (dzikirId: string): TasbihDayData => {
         // Masih hari yang sama, kembalikan data apa adanya
         return parsed;
       }
-      // Hari sudah berganti — simpan count kemarin, reset count hari ini
+      // Hari sudah berganti (00:00) — simpan count kemarin, reset count hari ini
       const newData: TasbihDayData = {
         date: today,
         count: 0,
@@ -61,6 +61,14 @@ export const TasbihView: React.FC = () => {
   const [dayData, setDayData] = useState<TasbihDayData>(() => loadDayData(PRESET_DZIKIR[0].id));
   const count = dayData.count;
   const [target, setTarget] = useState<number>(PRESET_DZIKIR[0].target);
+
+  // Auto-reset tasbih saat tengah malam 00:00 tiba
+  useEffect(() => {
+    const unsubscribeReset = dateService.subscribe(() => {
+      setDayData(loadDayData(selectedDzikir.id));
+    });
+    return () => unsubscribeReset();
+  }, [selectedDzikir.id]);
 
   /** Saat ganti dzikir, muat data harian untuk dzikir yang baru */
   const handleSelectDzikir = useCallback((item: typeof PRESET_DZIKIR[0]) => {

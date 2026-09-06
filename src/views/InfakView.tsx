@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { infakRepository } from '../services/repositories/infakRepository';
+import { getLocalDateString } from '../services/dateService';
 import type { InfakRecord, InfakCategory } from '../types';
 import { HeartHandshake, Plus, Trash2, Sparkles, DollarSign } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
@@ -31,7 +32,7 @@ export const InfakView: React.FC = () => {
 
     const newRecord: InfakRecord = {
       id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
+      date: getLocalDateString(),
       amount: num,
       category,
       note,

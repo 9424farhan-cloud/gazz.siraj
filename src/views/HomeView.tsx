@@ -3,6 +3,7 @@ import { prayerService } from '../services/prayerService';
 import { prayerRepository } from '../services/repositories/prayerRepository';
 import { worshipRepository, DEFAULT_WORSHIP_TARGETS } from '../services/repositories/worshipRepository';
 import { hijriService } from '../services/hijriService';
+import { dateService, getLocalDateString, getFormattedMasehiDate } from '../services/dateService';
 import type { PrayerLog, WorshipLog, PrayerName } from '../types';
 import {
   Clock,
@@ -38,46 +39,46 @@ export const HomeView: React.FC<HomeViewProps> = ({
   setActiveTab
 }) => {
   const { showToast } = useToast();
-  const [todayStr, setTodayStr] = useState<string>('');
+  const [todayStr, setTodayStr] = useState<string>(getLocalDateString());
+  const [nextPrayerInfo, setNextPrayerInfo] = useState<any>(null);
   const [prayerLog, setPrayerLog] = useState<PrayerLog>({
-    date: '',
-    subuh: true,
-    dzuhur: true,
+    date: getLocalDateString(),
+    subuh: false,
+    dzuhur: false,
     ashar: false,
     maghrib: false,
     isya: false
   });
-
   const [worshipLogs, setWorshipLogs] = useState<WorshipLog[]>([]);
-  const [nextPrayerInfo, setNextPrayerInfo] = useState<any>({
-    title: 'Ashar',
-    time: '15:18',
-    countdownFormatted: '01:24:36',
-    progressPercent: 45
-  });
-  const [hijriInfo, setHijriInfo] = useState<{ formatted: string; day: number; monthName: string; year: number }>(
+  const [hijriInfo, setHijriInfo] = useState<{ day: number; monthName: string; year: number; formatted: string }>(
     hijriService.getHijriDate(new Date())
   );
-  const [masehiStr, setMasehiStr] = useState<string>('');
+  const [masehiStr, setMasehiStr] = useState<string>(getFormattedMasehiDate());
 
   useEffect(() => {
-    const now = new Date();
-    const dateFormatted = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    setTodayStr(dateFormatted);
+    const loadDayData = (dateFormatted: string) => {
+      setTodayStr(dateFormatted);
+      const now = new Date();
+      setHijriInfo(hijriService.getHijriDate(now));
+      setMasehiStr(getFormattedMasehiDate(now));
 
-    // Compute dynamic Hijri & Masehi dates
-    setHijriInfo(hijriService.getHijriDate(now));
-    setMasehiStr(now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
-
-    prayerRepository.getPrayerLog(dateFormatted).then(log => {
-      setPrayerLog({
-        ...log,
-        subuh: true,
-        dzuhur: true
+      prayerRepository.getPrayerLog(dateFormatted).then(log => {
+        setPrayerLog(log);
       });
-    });
 
-    worshipRepository.getWorshipLogsForDate(dateFormatted).then(setWorshipLogs);
+      worshipRepository.getWorshipLogsForDate(dateFormatted).then(setWorshipLogs);
+    };
+
+    // Muat data awal untuk hari ini
+    const initialDate = getLocalDateString();
+    loadDayData(initialDate);
+
+    // Langganan auto-reset setiap pukul 00:00 (pergantian 24 jam)
+    const unsubscribeReset = dateService.subscribe((newDate) => {
+      console.info(`[HomeView] Reset harian dijalankan untuk tanggal: ${newDate}`);
+      loadDayData(newDate);
+      showToast('Hari baru telah tiba! Target ibadah harian telah di-reset 🌙', 'info');
+    });
 
     const updateCountdown = () => {
       const info = prayerService.getNextPrayerInfo(lat, lng, methodStr);
@@ -86,7 +87,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      unsubscribeReset();
+    };
   }, [lat, lng, methodStr]);
 
   const handleTogglePrayer = async (pName: PrayerName) => {

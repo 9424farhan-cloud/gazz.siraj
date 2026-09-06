@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { worshipRepository, DEFAULT_WORSHIP_TARGETS } from '../services/repositories/worshipRepository';
+import { dateService, getLocalDateString } from '../services/dateService';
 import type { WorshipLog, WorshipType } from '../types';
 import { CheckSquare, Plus, Minus, Edit3, CheckCircle2, Award, Sparkles } from 'lucide-react';
 import { Modal } from '../components/common/Modal';
@@ -7,15 +8,28 @@ import { useToast } from '../context/ToastContext';
 
 export const WorshipView: React.FC = () => {
   const { showToast } = useToast();
-  const [todayStr, setTodayStr] = useState<string>('');
+  const [todayStr, setTodayStr] = useState<string>(getLocalDateString());
   const [worshipLogs, setWorshipLogs] = useState<WorshipLog[]>([]);
   const [editingItem, setEditingItem] = useState<{ type: WorshipType; target: number } | null>(null);
   const [newTargetInput, setNewTargetInput] = useState<number>(5);
 
+  const loadLogs = (date: string) => {
+    setTodayStr(date);
+    worshipRepository.getWorshipLogsForDate(date).then(setWorshipLogs);
+  };
+
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    setTodayStr(today);
-    worshipRepository.getWorshipLogsForDate(today).then(setWorshipLogs);
+    const initialDate = getLocalDateString();
+    loadLogs(initialDate);
+
+    // Auto-reset tepat pada pukul 00:00 setiap malam
+    const unsubscribeReset = dateService.subscribe((newDate) => {
+      console.info(`[WorshipView] Reset harian pukul 00:00: ${newDate}`);
+      loadLogs(newDate);
+      showToast('Hari baru! Target ibadah sunnah telah di-reset 🌙', 'info');
+    });
+
+    return () => unsubscribeReset();
   }, []);
 
   const handleIncrement = async (type: WorshipType, delta: number) => {
@@ -45,24 +59,24 @@ export const WorshipView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-soft flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
             <CheckSquare className="w-4 h-4" />
             <span>Tracker Ibadah Harian</span>
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+          <h2 className="text-2xl font-extrabold text-white">
             Kelola & Pantau Amalan Sunnah
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-purple-200/70 mt-1">
             "Amalan yang paling dicintai Allah adalah yang istiqamah meskipun sedikit." (HR. Bukhari & Muslim)
           </p>
         </div>
 
-        <div className="flex items-center gap-3 bg-emerald-500/10 px-4 py-2.5 rounded-2xl border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-3 bg-emerald-500/10 px-4 py-2.5 rounded-2xl border border-emerald-500/20 text-emerald-400">
           <Award className="w-6 h-6" />
           <div>
-            <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Pencapaian Hari Ini</p>
+            <p className="text-[10px] uppercase font-bold text-purple-300/70">Pencapaian Hari Ini</p>
             <p className="text-base font-extrabold">{totalCompleted} dari {worshipLogs.length} Target Tuntas</p>
           </div>
         </div>
@@ -77,10 +91,10 @@ export const WorshipView: React.FC = () => {
           return (
             <div
               key={item.type}
-              className={`glass-card rounded-3xl p-5 border transition-all duration-300 ${
+              className={`cosmic-card rounded-3xl p-5 border transition-all duration-300 ${
                 item.completed
-                  ? 'border-emerald-500 bg-emerald-500/5 dark:bg-emerald-950/20 shadow-glow-emerald'
-                  : 'border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300 dark:hover:border-slate-700'
+                  ? 'border-emerald-500 bg-emerald-950/20 shadow-glow-emerald'
+                  : 'border-purple-500/20 hover:border-purple-500/40'
               }`}
             >
               <div className="flex items-start justify-between mb-3">

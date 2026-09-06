@@ -1,4 +1,5 @@
 import { getDB } from './db';
+import { getLocalDateString } from './dateService';
 import { prayerRepository } from './repositories/prayerRepository';
 import { worshipRepository } from './repositories/worshipRepository';
 import { infakRepository } from './repositories/infakRepository';
@@ -46,7 +47,7 @@ export const backupService = {
   },
 
   downloadJSONFile(jsonStr: string) {
-    const dateStr = new Date().toISOString().split('T')[0];
+    const dateStr = getLocalDateString();
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
