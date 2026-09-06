@@ -2,6 +2,8 @@ import React, { Component, ErrorInfo, ReactNode, useEffect, useState } from 'rea
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { AudioProvider } from './context/AudioContext';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import { settingsRepository } from './services/repositories/settingsRepository';
 import type { AppSettings } from './types';
 
@@ -11,6 +13,7 @@ import { BottomNav } from './components/common/BottomNav';
 import { GlobalAudioPlayer } from './components/common/GlobalAudioPlayer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { LocationModal } from './components/common/LocationModal';
+import { LoginScreen } from './components/common/LoginScreen';
 
 import { HomeView } from './views/HomeView';
 import { PrayerView } from './views/PrayerView';
@@ -87,7 +90,32 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+// AuthGate: handles auth state → shows LoginScreen or MainApp
 export const AppContent: React.FC = () => {
+  const { user, loading, redirectLoading } = useAuth();
+  const [isGuestMode, setIsGuestMode] = useState<boolean>(() =>
+    sessionStorage.getItem('SIRAJ_GUEST_MODE') === 'true'
+  );
+
+  useEffect(() => {
+    const handleGuestMode = () => setIsGuestMode(true);
+    window.addEventListener('siraj-guest-mode', handleGuestMode);
+    return () => window.removeEventListener('siraj-guest-mode', handleGuestMode);
+  }, []);
+
+  // Wait for Firebase to resolve auth state (keeps index.html splash visible)
+  // Also wait for redirect result processing on mobile
+  if (loading) return null;
+
+  // Show login screen if not authenticated and not in guest mode
+  // LoginScreen will show its own redirect-loading spinner if redirectLoading is true
+  if (!user && !isGuestMode) return <LoginScreen />;
+
+  return <MainApp />;
+};
+
+// MainApp: the full app (all hooks live here, no conditional before them)
+const MainApp: React.FC = () => {
   const [activeTab, setActiveTabState] = useState<string>('home');
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
   const [settings, setSettings] = useState<AppSettings>({
@@ -257,13 +285,15 @@ export const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <ThemeProvider>
-        <ToastProvider>
-          <AudioProvider>
-            <AppContent />
-          </AudioProvider>
-        </ToastProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <AudioProvider>
+              <AppContent />
+            </AudioProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 };

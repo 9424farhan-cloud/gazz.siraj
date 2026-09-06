@@ -2,16 +2,17 @@
   "name": "SIRAJ — Your Daily Worship Companion",
   "short_name": "SIRAJ",
   "description": "Aplikasi pendamping ibadah harian modern, elegan, tenang, dan cepat.",
-  "start_url": "/",
-  "id": "/",
+  "start_url": "./",
+  "id": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#059669",
+  "background_color": "#080915",
+  "theme_color": "#7c3aed",
   "orientation": "any",
   "categories": ["lifestyle", "utilities", "productivity"],
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "./favicon.svg",
       "sizes": "48x48 72x72 96x96 128x128 192x192 256x256 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

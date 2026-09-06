@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { prayerService } from '../services/prayerService';
 import { prayerRepository } from '../services/repositories/prayerRepository';
-import { worshipRepository } from '../services/repositories/worshipRepository';
+import { worshipRepository, DEFAULT_WORSHIP_TARGETS } from '../services/repositories/worshipRepository';
+import { hijriService } from '../services/hijriService';
 import type { PrayerLog, WorshipLog, PrayerName } from '../types';
 import {
   Clock,
-  CheckCircle2,
   Circle,
   BookOpen,
   Radio,
@@ -14,13 +14,10 @@ import {
   Compass,
   MapPin,
   HeartHandshake,
-  Flame,
   Moon,
-  Sparkles,
   ChevronRight,
   Sun,
   Coffee,
-  Calendar,
   Check
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
@@ -58,11 +55,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
     countdownFormatted: '01:24:36',
     progressPercent: 45
   });
+  const [hijriInfo, setHijriInfo] = useState<{ formatted: string; day: number; monthName: string; year: number }>(
+    hijriService.getHijriDate(new Date())
+  );
+  const [masehiStr, setMasehiStr] = useState<string>('');
 
   useEffect(() => {
     const now = new Date();
     const dateFormatted = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     setTodayStr(dateFormatted);
+
+    // Compute dynamic Hijri & Masehi dates
+    setHijriInfo(hijriService.getHijriDate(now));
+    setMasehiStr(now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
 
     prayerRepository.getPrayerLog(dateFormatted).then(log => {
       setPrayerLog({
@@ -257,45 +262,25 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="cosmic-card rounded-3xl p-5 flex flex-col justify-between">
           <h3 className="text-xs font-bold text-purple-300/80 uppercase tracking-widest mb-3">Daily Worship</h3>
           <div className="space-y-2.5 text-xs">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-                <span className="text-purple-200">Tilawah</span>
-              </div>
-              <span className="text-[10px] font-mono text-purple-300/70">5 / 10 halaman</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CircleDot className="w-3.5 h-3.5 text-purple-400" />
-                <span className="text-purple-200">Dzikir</span>
-              </div>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-                <span className="text-purple-200">Murajaah</span>
-              </div>
-              <span className="text-[10px] font-mono text-purple-300/70">1 / 2 halaman</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CircleDot className="w-3.5 h-3.5 text-purple-400" />
-                <span className="text-purple-200">Tasbih</span>
-              </div>
-              <span className="text-[10px] font-mono text-purple-300/70">230 / 500</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Moon className="w-3.5 h-3.5 text-purple-400" />
-                <span className="text-purple-200">Witir</span>
-              </div>
-              <div className="w-3.5 h-3.5 rounded-full border border-purple-300/30" />
-            </div>
+            {DEFAULT_WORSHIP_TARGETS.map(target => {
+              const log = worshipLogs.find(l => l.type === target.type);
+              const count = log?.count ?? 0;
+              const tgt = target.target;
+              const done = count >= tgt;
+              return (
+                <div key={target.type} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">{target.icon}</span>
+                    <span className="text-purple-200">{target.title.split(' ')[0]}</span>
+                  </div>
+                  {done ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  ) : (
+                    <span className="text-[10px] font-mono text-purple-300/70">{count} / {tgt} {target.unit}</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -340,8 +325,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="cosmic-card rounded-3xl p-5 flex items-center justify-between relative overflow-hidden border border-purple-500/30">
           <div>
             <h3 className="text-xs font-bold text-purple-300/80 uppercase tracking-widest mb-2">Kalender Hijriah</h3>
-            <p className="text-xl font-black text-white">5 Safar 1448 H</p>
-            <p className="text-xs text-purple-200/70 mt-1">Jumat, 29 Agustus 2026</p>
+            <p className="text-xl font-black text-white">{hijriInfo.day} {hijriInfo.monthName} {hijriInfo.year} H</p>
+            <p className="text-xs text-purple-200/70 mt-1">{masehiStr}</p>
           </div>
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-900/60 to-indigo-800/50 border border-purple-500/40 flex items-center justify-center text-amber-300 text-2xl shadow-lg">
             🌙

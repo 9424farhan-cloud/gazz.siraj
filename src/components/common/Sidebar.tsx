@@ -14,9 +14,10 @@ import {
   Settings,
   Sparkles,
   PanelLeftClose,
-  Flame,
+  User as UserIcon,
   ChevronDown
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 interface SidebarProps {
   activeTab: string;
@@ -25,6 +26,9 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onToggleDesktopSidebar }) => {
+  const { user } = useAuth();
+  const displayName = user?.displayName || 'Tamu';
+  const firstName = displayName.split(' ')[0];
   const MENU_ITEMS = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'prayer', label: 'Prayer', icon: Clock },
@@ -127,14 +131,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onTog
         {/* User Profile Widget */}
         <div className="p-3 rounded-2xl bg-[#12132b]/80 border border-[#282552]/50 flex items-center justify-between cursor-pointer hover:bg-purple-900/30 transition">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-500 to-amber-400 p-0.5 shadow-md">
-              <div className="w-full h-full rounded-full bg-[#080915] flex items-center justify-center text-white font-bold text-xs">
-                🔮
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt={displayName}
+                className="w-9 h-9 rounded-full object-cover ring-2 ring-purple-500/40"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-500 to-amber-400 p-0.5 shadow-md">
+                <div className="w-full h-full rounded-full bg-[#080915] flex items-center justify-center">
+                  <UserIcon className="w-4 h-4 text-purple-300" />
+                </div>
               </div>
-            </div>
+            )}
             <div>
-              <h4 className="text-xs font-bold text-white">Gazz</h4>
-              <p className="text-[10px] text-purple-300/60">Jazakumullahu khairan</p>
+              <h4 className="text-xs font-bold text-white">{firstName}</h4>
+              <p className="text-[10px] text-purple-300/60">{user ? user.email?.split('@')[0] || 'Pengguna' : 'Mode Tamu'}</p>
             </div>
           </div>
           <ChevronDown className="w-3.5 h-3.5 text-purple-300/60" />

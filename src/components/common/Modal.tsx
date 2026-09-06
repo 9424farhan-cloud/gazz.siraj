@@ -48,12 +48,14 @@ export const Modal: React.FC<ModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className={`relative w-full ${maxWidthClasses} bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 z-10 overflow-hidden`}>
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
-          {title && <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h3>}
+      <div className={`relative w-full ${maxWidthClasses} rounded-3xl shadow-2xl border border-purple-500/30 p-6 z-10 overflow-hidden`}
+        style={{ background: 'linear-gradient(135deg, #0d0e24, #12132b)', boxShadow: '0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,58,237,0.2)' }}
+      >
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#282552]/50">
+          {title && <h3 className="text-lg font-bold text-white">{title}</h3>}
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            className="p-2 text-purple-300/60 hover:text-white rounded-full hover:bg-purple-900/40 transition"
           >
             <X className="w-5 h-5" />
           </button>

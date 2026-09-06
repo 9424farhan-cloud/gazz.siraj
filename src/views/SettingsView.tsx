@@ -117,23 +117,23 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
   return (
     <div className="space-y-6 pb-12 max-w-3xl mx-auto">
       {/* Header Banner */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-soft">
-        <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20">
+        <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
           <SettingsIcon className="w-4 h-4" />
           <span>Pengaturan Aplikasi</span>
         </div>
-        <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-extrabold text-white">
           Preferensi & Keselamatan Data
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-xs text-purple-300/70 mt-1">
           Atur tampilan, metode shalat, audio, dan cadangkan data anda secara mandiri.
         </p>
       </div>
 
       {/* 1. TAMPILAN (APPEARANCE) */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/60 dark:border-slate-800/60 shadow-soft space-y-4">
-        <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Sun className="w-5 h-5 text-emerald-500" />
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20 space-y-4">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <Sun className="w-5 h-5 text-amber-400" />
           <span>Tampilan & Tema</span>
         </h3>
 
@@ -142,8 +142,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
             onClick={() => handleUpdate('theme', 'light')}
             className={`p-3.5 rounded-2xl border text-center font-bold text-xs flex flex-col items-center gap-2 transition ${
               settings.theme === 'light'
-                ? 'bg-emerald-600 text-white border-emerald-500 shadow-md'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                ? 'bg-purple-600 text-white border-purple-500 shadow-md'
+                : 'bg-[#12132b]/80 border-[#282552]/60 text-purple-200 hover:border-purple-500/40'
             }`}
           >
             <Sun className="w-5 h-5" />
@@ -154,8 +154,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
             onClick={() => handleUpdate('theme', 'dark')}
             className={`p-3.5 rounded-2xl border text-center font-bold text-xs flex flex-col items-center gap-2 transition ${
               settings.theme === 'dark'
-                ? 'bg-emerald-600 text-white border-emerald-500 shadow-md'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                ? 'bg-purple-600 text-white border-purple-500 shadow-md'
+                : 'bg-[#12132b]/80 border-[#282552]/60 text-purple-200 hover:border-purple-500/40'
             }`}
           >
             <Moon className="w-5 h-5" />
@@ -166,8 +166,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
             onClick={() => handleUpdate('theme', 'system')}
             className={`p-3.5 rounded-2xl border text-center font-bold text-xs flex flex-col items-center gap-2 transition ${
               settings.theme === 'system'
-                ? 'bg-emerald-600 text-white border-emerald-500 shadow-md'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                ? 'bg-purple-600 text-white border-purple-500 shadow-md'
+                : 'bg-[#12132b]/80 border-[#282552]/60 text-purple-200 hover:border-purple-500/40'
             }`}
           >
             <Laptop className="w-5 h-5" />
@@ -177,33 +177,33 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
       </div>
 
       {/* 2. PRAYER SETTINGS */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/60 dark:border-slate-800/60 shadow-soft space-y-4">
-        <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Clock className="w-5 h-5 text-emerald-500" />
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20 space-y-4">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <Clock className="w-5 h-5 text-amber-400" />
           <span>Pengaturan Shalat & Lokasi</span>
         </h3>
 
-        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60">
+        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#12132b]/80 border border-[#282552]/60">
           <div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white">Lokasi Saat Ini</h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{settings.locationName}</p>
+            <h4 className="text-sm font-bold text-white">Lokasi Saat Ini</h4>
+            <p className="text-xs text-purple-300/70">{settings.locationName}</p>
           </div>
           <button
             onClick={onOpenLocationModal}
-            className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-md hover:from-purple-500 hover:to-indigo-500 transition"
           >
             Ubah Lokasi
           </button>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">
+          <label className="block text-xs font-bold text-purple-300/80 uppercase tracking-wider mb-2">
             Metode Perhitungan Waktu Shalat
           </label>
           <select
             value={settings.calculationMethod}
             onChange={(e) => handleUpdate('calculationMethod', e.target.value as any)}
-            className="w-full px-4 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full px-4 py-2.5 rounded-2xl bg-[#12132b]/80 border border-[#282552]/60 text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
             <option value="KEMENAG">Kemenag RI / Standar Asia Tenggara (Fajr 20°, Isha 18°)</option>
             <option value="MWL">Muslim World League (MWL)</option>
@@ -215,26 +215,26 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
       </div>
 
       {/* 3. DATA SAFETY & BACKUP RESTORE */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/60 dark:border-slate-800/60 shadow-soft space-y-4">
-        <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-emerald-500" />
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20 space-y-4">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-amber-400" />
           <span>Data Safety, Backup & Restore</span>
         </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-purple-300/70">
           Data tersimpan di IndexedDB browser perangkat anda. Ekspor file backup secara berkala untuk menjaga keamanan data.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
             onClick={handleExportJSON}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md transition"
           >
             <Download className="w-4 h-4" />
             <span>Ekspor Backup Data (JSON)</span>
           </button>
 
-          <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition border border-slate-200 dark:border-slate-700 cursor-pointer">
-            <Upload className="w-4 h-4 text-emerald-500" />
+          <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-[#12132b]/80 hover:bg-purple-900/30 text-purple-200 font-bold text-xs transition border border-[#282552]/60 cursor-pointer">
+            <Upload className="w-4 h-4 text-amber-400" />
             <span>Impor / Pulihkan Backup</span>
             <input
               type="file"
@@ -245,10 +245,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
           </label>
         </div>
 
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="pt-4 border-t border-[#282552]/40">
           <button
             onClick={() => setIsClearModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 font-bold text-xs transition border border-rose-500/20"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-400 font-bold text-xs transition border border-rose-500/30"
           >
             <Trash2 className="w-4 h-4" />
             <span>Hapus Seluruh Data (Clear Data)</span>
@@ -257,15 +257,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
       </div>
 
       {/* 4. ABOUT */}
-      <div className="glass-card rounded-3xl p-6 border border-slate-200/60 dark:border-slate-800/60 shadow-soft text-center space-y-2">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white font-bold text-2xl mx-auto flex items-center justify-center shadow-lg">
+      <div className="cosmic-card rounded-3xl p-6 border border-purple-500/20 text-center space-y-2">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 via-purple-600 to-indigo-900 text-amber-200 font-bold text-2xl mx-auto flex items-center justify-center shadow-lg shadow-purple-900/40 border border-amber-400/30">
           س
         </div>
-        <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">SIRAJ v1.0.0</h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <h3 className="text-lg font-extrabold text-white">SIRAJ v1.0.0</h3>
+        <p className="text-xs text-purple-300/70">
           Your Daily Worship Companion • Modern, Elegan, Tenang & Offline-First PWA
         </p>
-        <p className="text-[11px] text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <p className="text-[11px] text-purple-300/50 pt-2 border-t border-[#282552]/40">
           Privasi Terjamin • Tidak Mengirimkan Data Lokasi atau Keuangan ke Server Luar
         </p>
       </div>
@@ -273,7 +273,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
       {/* RESTORE CONFIRMATION MODAL */}
       <Modal isOpen={isRestoreModalOpen} onClose={() => setIsRestoreModalOpen(false)} title="Konfirmasi Pemulihan Data">
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs flex items-start gap-3">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-bold">Perhatian Pemulihan Backup:</p>
@@ -286,13 +286,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
           <div className="flex justify-end gap-2 pt-2">
             <button
               onClick={() => setIsRestoreModalOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-purple-300/70 hover:text-white transition"
             >
               Batal
             </button>
             <button
               onClick={handleConfirmRestore}
-              className="px-5 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-md hover:from-purple-500 hover:to-indigo-500 transition"
             >
               Pulihkan Data Sekarang
             </button>
@@ -323,13 +323,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
           <div className="flex justify-end gap-2 pt-2">
             <button
               onClick={() => setIsClearModalOpen(false)}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-purple-300/70 hover:text-white transition"
             >
               Batal
             </button>
             <button
               onClick={handleConfirmClearData}
-              className="px-5 py-2 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-md"
+              className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md transition"
             >
               Ya, Hapus Permanen
             </button>

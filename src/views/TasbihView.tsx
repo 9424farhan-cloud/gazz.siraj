@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { CircleDot, RotateCcw, Plus, Minus, Sparkles } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 
@@ -9,26 +9,91 @@ const PRESET_DZIKIR = [
   { id: 'astaghfirullah', name: 'Astaghfirullah', arabic: 'أَسْتَغْفِرُ اللَّهَ', target: 100 }
 ];
 
+/** Key localStorage untuk menyimpan data tasbih harian per dzikir */
+const getTasbihStorageKey = (dzikirId: string) => `siraj_tasbih_${dzikirId}`;
+const getTodayStr = () => new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+interface TasbihDayData {
+  date: string;
+  count: number;
+  yesterdayCount: number;
+  bestCount: number;
+}
+
+/** Ambil data harian dari localStorage, auto-reset jika sudah ganti hari */
+const loadDayData = (dzikirId: string): TasbihDayData => {
+  const today = getTodayStr();
+  const raw = localStorage.getItem(getTasbihStorageKey(dzikirId));
+  if (raw) {
+    try {
+      const parsed: TasbihDayData = JSON.parse(raw);
+      if (parsed.date === today) {
+        // Masih hari yang sama, kembalikan data apa adanya
+        return parsed;
+      }
+      // Hari sudah berganti — simpan count kemarin, reset count hari ini
+      const newData: TasbihDayData = {
+        date: today,
+        count: 0,
+        yesterdayCount: parsed.count,
+        bestCount: Math.max(parsed.bestCount ?? 0, parsed.count),
+      };
+      localStorage.setItem(getTasbihStorageKey(dzikirId), JSON.stringify(newData));
+      return newData;
+    } catch {
+      // Data korup, mulai dari awal
+    }
+  }
+  // Belum ada data sama sekali
+  const fresh: TasbihDayData = { date: today, count: 0, yesterdayCount: 0, bestCount: 0 };
+  localStorage.setItem(getTasbihStorageKey(dzikirId), JSON.stringify(fresh));
+  return fresh;
+};
+
+/** Simpan count terbaru ke localStorage */
+const saveDayData = (dzikirId: string, data: TasbihDayData) => {
+  localStorage.setItem(getTasbihStorageKey(dzikirId), JSON.stringify(data));
+};
+
 export const TasbihView: React.FC = () => {
   const { showToast } = useToast();
   const [selectedDzikir, setSelectedDzikir] = useState(PRESET_DZIKIR[0]);
-  const [count, setCount] = useState<number>(230);
-  const [target, setTarget] = useState<number>(500);
+  const [dayData, setDayData] = useState<TasbihDayData>(() => loadDayData(PRESET_DZIKIR[0].id));
+  const count = dayData.count;
+  const [target, setTarget] = useState<number>(PRESET_DZIKIR[0].target);
 
-  const handleIncrement = () => {
-    const next = count + 1;
-    setCount(next);
+  /** Saat ganti dzikir, muat data harian untuk dzikir yang baru */
+  const handleSelectDzikir = useCallback((item: typeof PRESET_DZIKIR[0]) => {
+    setSelectedDzikir(item);
+    setTarget(item.target);
+    setDayData(loadDayData(item.id));
+  }, []);
+
+  const updateCount = useCallback((newCount: number) => {
+    setDayData(prev => {
+      const updated: TasbihDayData = {
+        ...prev,
+        count: newCount,
+        bestCount: Math.max(prev.bestCount, newCount),
+      };
+      saveDayData(selectedDzikir.id, updated);
+      return updated;
+    });
+  }, [selectedDzikir.id]);
+
+  const handleIncrement = useCallback(() => {
     if (navigator.vibrate) navigator.vibrate(20);
-  };
+    updateCount(count + 1);
+  }, [count, updateCount]);
 
-  const handleDecrement = () => {
-    setCount(prev => Math.max(0, prev - 1));
-  };
+  const handleDecrement = useCallback(() => {
+    if (count > 0) updateCount(count - 1);
+  }, [count, updateCount]);
 
-  const handleReset = () => {
-    setCount(0);
+  const handleReset = useCallback(() => {
+    updateCount(0);
     showToast('Hitungan tasbih telah direset', 'info');
-  };
+  }, [updateCount, showToast]);
 
   return (
     <div className="space-y-6 pb-12 max-w-xl mx-auto text-center">
@@ -47,7 +112,7 @@ export const TasbihView: React.FC = () => {
         {PRESET_DZIKIR.map(item => (
           <button
             key={item.id}
-            onClick={() => { setSelectedDzikir(item); setCount(0); setTarget(item.target); }}
+            onClick={() => handleSelectDzikir(item)}
             className={`p-2.5 rounded-2xl text-xs font-bold transition border ${
               selectedDzikir.id === item.id
                 ? 'bg-purple-900/80 border-purple-500/60 text-amber-300 shadow-md shadow-purple-900/30'
@@ -70,7 +135,7 @@ export const TasbihView: React.FC = () => {
               {count}
             </span>
             <span className="text-xs font-bold text-purple-300/60 mt-1">/ {target}</span>
-            <span className="text-[11px] font-semibold text-amber-300 mt-2">Ketuk untuk Menguji</span>
+            <span className="text-[11px] font-semibold text-amber-300 mt-2">Ketuk untuk Bertasbih</span>
           </div>
         </button>
 
@@ -106,15 +171,15 @@ export const TasbihView: React.FC = () => {
       <div className="grid grid-cols-3 gap-3">
         <div className="cosmic-card p-4 rounded-2xl border border-[#282552]/40 text-center">
           <p className="text-[10px] text-purple-300/60 font-semibold uppercase">Hari Ini</p>
-          <p className="text-lg font-black text-white font-mono mt-0.5">230</p>
+          <p className="text-lg font-black text-white font-mono mt-0.5">{dayData.count}</p>
         </div>
         <div className="cosmic-card p-4 rounded-2xl border border-[#282552]/40 text-center">
           <p className="text-[10px] text-purple-300/60 font-semibold uppercase">Kemarin</p>
-          <p className="text-lg font-black text-purple-300 font-mono mt-0.5">150</p>
+          <p className="text-lg font-black text-purple-300 font-mono mt-0.5">{dayData.yesterdayCount}</p>
         </div>
         <div className="cosmic-card p-4 rounded-2xl border border-[#282552]/40 text-center">
           <p className="text-[10px] text-purple-300/60 font-semibold uppercase">Terbaik</p>
-          <p className="text-lg font-black text-amber-300 font-mono mt-0.5">560</p>
+          <p className="text-lg font-black text-amber-300 font-mono mt-0.5">{dayData.bestCount}</p>
         </div>
       </div>
     </div>
