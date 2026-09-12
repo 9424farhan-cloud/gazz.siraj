@@ -77,7 +77,11 @@ export const QuranHifzhView: React.FC<QuranHifzhViewProps> = ({
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [personalNotes, setPersonalNotes] = useState<string>('');
   const [finalStatus, setFinalStatus] = useState<MemorizationStatus>('sedang');
-  const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
+  useEffect(() => {
+    return () => {
+      audioService.stop();
+    };
+  }, []);
 
   useEffect(() => {
     if (preselectedSurah) {
@@ -255,6 +259,7 @@ export const QuranHifzhView: React.FC<QuranHifzhViewProps> = ({
       setUserFragmentOrder([]);
       setIsAnswerChecked(false);
     } else {
+      audioService.stop();
       setIsFinished(true);
       const pct = Math.round((correctCount / questions.length) * 100);
       if (pct >= 85) setFinalStatus('kuat');

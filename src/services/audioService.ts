@@ -266,6 +266,21 @@ class AudioServiceManager {
 
     if (this.currentTrack) {
       this.currentTrack.isPlaying = false;
+      const track = this.currentTrack;
+
+      // Auto dismiss snippet / challenge audio after brief delay so it doesn't linger on screen
+      if (
+        track.title.includes('Tantangan') ||
+        track.title.includes('Latihan') ||
+        (!track.isFullSurah && track.type === 'quran' && this.playlist.length === 0)
+      ) {
+        setTimeout(() => {
+          if (this.currentTrack === track && !this.currentTrack.isPlaying) {
+            this.stop();
+          }
+        }, 1000);
+      }
+
       this.notify();
     }
   }

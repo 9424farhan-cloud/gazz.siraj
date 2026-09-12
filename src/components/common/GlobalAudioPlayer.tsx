@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAudio } from '../../context/AudioContext';
-import { Play, Pause, Square, Radio, Volume2, VolumeX, WifiOff, ChevronUp, ChevronDown } from 'lucide-react';
+import { Play, Pause, Square, Radio, Volume2, VolumeX, WifiOff, ChevronUp, ChevronDown, X } from 'lucide-react';
 
 export const GlobalAudioPlayer: React.FC = () => {
   const { currentTrack, currentTime, duration, isOnline, togglePlayPause, stop, seek, setVolume } = useAudio();
   const [isMuted, setIsMuted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Auto-dismiss player when audio snippet/challenge finishes playing
+  useEffect(() => {
+    if (
+      currentTrack &&
+      !currentTrack.isPlaying &&
+      currentTrack.type !== 'radio' &&
+      !currentTrack.isFullSurah &&
+      duration > 0 &&
+      currentTime >= duration - 0.5
+    ) {
+      const timer = setTimeout(() => {
+        stop();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentTrack, currentTime, duration, stop]);
 
   if (!currentTrack) return null;
 
@@ -77,10 +94,18 @@ export const GlobalAudioPlayer: React.FC = () => {
 
             <button
               onClick={stop}
-              className="p-2 text-slate-400 hover:text-rose-400 rounded-full transition"
+              className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-full transition"
               title="Hentikan Audio"
             >
               <Square className="w-4 h-4 fill-current" />
+            </button>
+
+            <button
+              onClick={stop}
+              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition"
+              title="Tutup Pemutar Audio"
+            >
+              <X className="w-4 h-4" />
             </button>
 
             <button

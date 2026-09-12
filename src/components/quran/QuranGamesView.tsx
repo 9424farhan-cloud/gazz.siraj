@@ -66,6 +66,9 @@ export const QuranGamesView: React.FC<QuranGamesViewProps> = ({
 
   useEffect(() => {
     quranCenterRepository.getAllGameRecords().then(setHistory);
+    return () => {
+      audioService.stop();
+    };
   }, []);
 
   const generateGameQuestions = async (type: QuranGameType): Promise<GameQuestion[]> => {
@@ -214,7 +217,8 @@ export const QuranGamesView: React.FC<QuranGamesViewProps> = ({
         audioService.playQuranVerse(questions[nextIdx].audioUrl, `Tantangan Audio`, `Soal ${nextIdx + 1}`);
       }
     } else {
-      // Game Over
+      // Game Over - stop audio immediately
+      audioService.stop();
       setIsGameOver(true);
       const xp = (correctScore + (selectedOption === questions[currentIdx].correctIndex ? 1 : 0)) * 20;
       setTotalXP(xp);
