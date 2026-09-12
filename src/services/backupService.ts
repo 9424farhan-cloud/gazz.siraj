@@ -9,7 +9,7 @@ import { settingsRepository } from './repositories/settingsRepository';
 
 export interface SirajBackupData {
   app: 'SIRAJ';
-  version: '1.0';
+  version: '1.0' | '2.0';
   exportedAt: string;
   prayer_logs: any[];
   worship_logs: any[];
@@ -18,10 +18,14 @@ export interface SirajBackupData {
   quran_bookmarks: any[];
   quran_last_read: any[];
   settings: Record<string, any>;
+  quran_memorization?: any[];
+  quran_murajaah?: any[];
+  quran_game_stats?: any[];
 }
 
 export const backupService = {
   async exportDataJSON(): Promise<string> {
+    const db = await getDB();
     const prayerLogs = await prayerRepository.getAllLogs();
     const worshipLogs = await worshipRepository.getAllLogs();
     const infakRecords = await infakRepository.getAllRecords();
@@ -29,10 +33,13 @@ export const backupService = {
     const quranBookmarks = await quranRepository.getBookmarks();
     const quranLastRead = await quranRepository.getLastRead();
     const settings = await settingsRepository.getSettings();
+    const quranMemorization = await db.getAll('quran_memorization').catch(() => []);
+    const quranMurajaah = await db.getAll('quran_murajaah').catch(() => []);
+    const quranGameStats = await db.getAll('quran_game_stats').catch(() => []);
 
     const backupObj: SirajBackupData = {
       app: 'SIRAJ',
-      version: '1.0',
+      version: '2.0',
       exportedAt: new Date().toISOString(),
       prayer_logs: prayerLogs,
       worship_logs: worshipLogs,
@@ -40,7 +47,10 @@ export const backupService = {
       tasbih_history: tasbihHistory,
       quran_bookmarks: quranBookmarks,
       quran_last_read: quranLastRead ? [quranLastRead] : [],
-      settings
+      settings,
+      quran_memorization: quranMemorization,
+      quran_murajaah: quranMurajaah,
+      quran_game_stats: quranGameStats
     };
 
     return JSON.stringify(backupObj, null, 2);
@@ -111,6 +121,24 @@ export const backupService = {
       await db.put('quran_last_read', data.quran_last_read[0]);
     }
 
+    if (Array.isArray(data.quran_memorization)) {
+      for (const item of data.quran_memorization) {
+        await db.put('quran_memorization', item);
+      }
+    }
+
+    if (Array.isArray(data.quran_murajaah)) {
+      for (const item of data.quran_murajaah) {
+        await db.put('quran_murajaah', item);
+      }
+    }
+
+    if (Array.isArray(data.quran_game_stats)) {
+      for (const item of data.quran_game_stats) {
+        await db.put('quran_game_stats', item);
+      }
+    }
+
     if (data.settings) {
       await settingsRepository.saveSettings(data.settings as any);
     }
@@ -126,6 +154,10 @@ export const backupService = {
     await db.clear('quran_last_read');
     await db.clear('doa_bookmarks');
     await db.clear('settings');
+    await db.clear('quran_memorization').catch(() => {});
+    await db.clear('quran_murajaah').catch(() => {});
+    await db.clear('quran_game_stats').catch(() => {});
+    await db.clear('quran_juz_progress').catch(() => {});
     localStorage.clear();
   }
 };

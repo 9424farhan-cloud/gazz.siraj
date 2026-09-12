@@ -132,3 +132,62 @@ export interface ActiveAudioTrack {
   ayahNumber?: number;
   isFullSurah?: boolean;
 }
+
+export type MemorizationStatus = 'kuat' | 'sedang' | 'perlu_murajaah' | 'belum';
+
+export interface SurahMemorizationRecord {
+  id: string; // e.g. "mem_78" or "mem_78_1_10"
+  surahNumber: number;
+  startAyah: number;
+  endAyah: number;
+  status: MemorizationStatus;
+  percentage: number;
+  lastStudiedAt: number;
+  nextMurajaahAt?: number;
+  notes?: string;
+}
+
+export interface MurajaahScheduleItem {
+  id: string;
+  surahNumber: number;
+  surahName: string;
+  startAyah: number;
+  endAyah: number;
+  scheduledDate: string; // YYYY-MM-DD
+  intervalDays: number;
+  isCompleted: boolean;
+  completedAt?: number;
+  notes?: string;
+}
+
+export type QuranGameType = 'tebak_surah' | 'lanjutkan_ayat' | 'pilih_ayat' | 'susun_urutan' | 'audio_murajaah';
+
+export interface QuranGameRecord {
+  id: string;
+  juzNumber: number;
+  gameType: QuranGameType;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  xpEarned: number;
+  timestamp: number;
+}
+
+export interface QuranJuzProgress {
+  juzNumber: number;
+  readPercentage: number;
+  memorizationPercentage: number;
+  audioPercentage: number;
+  lastActiveAt: number;
+}
+
+export type QuranCenterTab =
+  | 'hub'
+  | 'juz_detail'
+  | 'baca'
+  | 'audio'
+  | 'hifzh'
+  | 'murajaah'
+  | 'games'
+  | 'journey'
+  | 'progress';

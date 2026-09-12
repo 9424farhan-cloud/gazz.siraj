@@ -1,6 +1,17 @@
 import { openDB } from 'idb';
 import type { DBSchema, IDBPDatabase } from 'idb';
-import type { PrayerLog, WorshipLog, InfakRecord, TasbihHistory, QuranBookmark, QuranLastRead } from '../types';
+import type {
+  PrayerLog,
+  WorshipLog,
+  InfakRecord,
+  TasbihHistory,
+  QuranBookmark,
+  QuranLastRead,
+  SurahMemorizationRecord,
+  MurajaahScheduleItem,
+  QuranGameRecord,
+  QuranJuzProgress
+} from '../types';
 
 interface SirajDBSchema extends DBSchema {
   prayer_logs: {
@@ -38,10 +49,28 @@ interface SirajDBSchema extends DBSchema {
     key: string;
     value: { key: string; value: any };
   };
+  quran_memorization: {
+    key: string;
+    value: SurahMemorizationRecord;
+  };
+  quran_murajaah: {
+    key: string;
+    value: MurajaahScheduleItem;
+    indexes: { 'by-date': string };
+  };
+  quran_game_stats: {
+    key: string;
+    value: QuranGameRecord;
+    indexes: { 'by-timestamp': number };
+  };
+  quran_juz_progress: {
+    key: number;
+    value: QuranJuzProgress;
+  };
 }
 
 const DB_NAME = 'SIRAJ_DB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbPromise: Promise<IDBPDatabase<SirajDBSchema>> | null = null;
 
@@ -84,6 +113,25 @@ export const getDB = (): Promise<IDBPDatabase<SirajDBSchema>> => {
 
         if (!db.objectStoreNames.contains('settings')) {
           db.createObjectStore('settings', { keyPath: 'key' });
+        }
+
+        // Quran Center new stores (Version 2)
+        if (!db.objectStoreNames.contains('quran_memorization')) {
+          db.createObjectStore('quran_memorization', { keyPath: 'id' });
+        }
+
+        if (!db.objectStoreNames.contains('quran_murajaah')) {
+          const murajaahStore = db.createObjectStore('quran_murajaah', { keyPath: 'id' });
+          murajaahStore.createIndex('by-date', 'scheduledDate');
+        }
+
+        if (!db.objectStoreNames.contains('quran_game_stats')) {
+          const gameStore = db.createObjectStore('quran_game_stats', { keyPath: 'id' });
+          gameStore.createIndex('by-timestamp', 'timestamp');
+        }
+
+        if (!db.objectStoreNames.contains('quran_juz_progress')) {
+          db.createObjectStore('quran_juz_progress', { keyPath: 'juzNumber' });
         }
       },
     });
