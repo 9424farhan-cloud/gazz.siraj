@@ -14,6 +14,7 @@ import { GlobalAudioPlayer } from './components/common/GlobalAudioPlayer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { LocationModal } from './components/common/LocationModal';
 import { LoginScreen } from './components/common/LoginScreen';
+import { WelcomeScreen } from './components/common/WelcomeScreen';
 
 import { HomeView } from './views/HomeView';
 import { PrayerView } from './views/PrayerView';
@@ -90,28 +91,50 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-// AuthGate: handles auth state → shows LoginScreen or MainApp
+// AuthGate: handles auth state → shows WelcomeScreen, LoginScreen or MainApp
 export const AppContent: React.FC = () => {
   const { user, loading, redirectLoading } = useAuth();
   const [isGuestMode, setIsGuestMode] = useState<boolean>(() =>
     sessionStorage.getItem('SIRAJ_GUEST_MODE') === 'true'
   );
+  const [showWelcome, setShowWelcome] = useState<boolean>(() =>
+    sessionStorage.getItem('SIRAJ_WELCOME_DISMISSED') !== 'true'
+  );
 
   useEffect(() => {
     const handleGuestMode = () => setIsGuestMode(true);
+    const handleShowWelcome = () => setShowWelcome(true);
     window.addEventListener('siraj-guest-mode', handleGuestMode);
-    return () => window.removeEventListener('siraj-guest-mode', handleGuestMode);
+    window.addEventListener('siraj-show-welcome', handleShowWelcome);
+    return () => {
+      window.removeEventListener('siraj-guest-mode', handleGuestMode);
+      window.removeEventListener('siraj-show-welcome', handleShowWelcome);
+    };
   }, []);
 
   // Wait for Firebase to resolve auth state (keeps index.html splash visible)
   // Also wait for redirect result processing on mobile
   if (loading) return null;
 
-  // Show login screen if not authenticated and not in guest mode
-  // LoginScreen will show its own redirect-loading spinner if redirectLoading is true
-  if (!user && !isGuestMode) return <LoginScreen />;
+  const handleEnterFromWelcome = (targetTab?: string) => {
+    sessionStorage.setItem('SIRAJ_WELCOME_DISMISSED', 'true');
+    sessionStorage.setItem('SIRAJ_GUEST_MODE', 'true');
+    setIsGuestMode(true);
+    setShowWelcome(false);
 
-  return <MainApp />;
+    if (targetTab && targetTab !== 'home') {
+      window.location.hash = targetTab === 'journey' ? '#quran' : `#${targetTab}`;
+    } else {
+      window.location.hash = '';
+    }
+  };
+
+  return (
+    <>
+      {showWelcome && <WelcomeScreen onEnter={handleEnterFromWelcome} />}
+      {!user && !isGuestMode ? <LoginScreen /> : <MainApp />}
+    </>
+  );
 };
 
 // MainApp: the full app (all hooks live here, no conditional before them)

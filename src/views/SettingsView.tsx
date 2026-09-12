@@ -265,6 +265,17 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onOpenLocationModal 
         <p className="text-xs text-purple-300/70">
           Your Daily Worship Companion • Modern, Elegan, Tenang & Offline-First PWA
         </p>
+        <div className="pt-3 flex justify-center">
+          <button
+            onClick={() => {
+              sessionStorage.removeItem('SIRAJ_WELCOME_DISMISSED');
+              window.dispatchEvent(new Event('siraj-show-welcome'));
+            }}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600/30 to-teal-600/30 hover:from-emerald-600/50 hover:to-teal-600/50 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition flex items-center gap-2 shadow-sm"
+          >
+            <span>✨ Buka Layar Sambutan (Welcome Screen)</span>
+          </button>
+        </div>
         <p className="text-[11px] text-purple-300/50 pt-2 border-t border-[#282552]/40">
           Privasi Terjamin • Tidak Mengirimkan Data Lokasi atau Keuangan ke Server Luar
         </p>
