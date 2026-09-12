@@ -7,20 +7,15 @@ export const GlobalAudioPlayer: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Auto-dismiss player when audio snippet/challenge finishes playing
+  // Auto-dismiss player immediately when audio finishes playing
   useEffect(() => {
     if (
       currentTrack &&
-      !currentTrack.isPlaying &&
       currentTrack.type !== 'radio' &&
-      !currentTrack.isFullSurah &&
       duration > 0 &&
-      currentTime >= duration - 0.5
+      (currentTime >= duration || (!currentTrack.isPlaying && currentTime >= Math.max(0, duration - 0.5)))
     ) {
-      const timer = setTimeout(() => {
-        stop();
-      }, 1000);
-      return () => clearTimeout(timer);
+      stop();
     }
   }, [currentTrack, currentTime, duration, stop]);
 

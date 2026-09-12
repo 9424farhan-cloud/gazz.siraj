@@ -50,7 +50,17 @@ class AudioServiceManager {
     this.audio = new Audio();
     this.audio.preload = 'none';
 
-    this.audio.addEventListener('timeupdate', () => this.notify());
+    this.audio.addEventListener('timeupdate', () => {
+      if (
+        this.audio.duration > 0 &&
+        this.audio.currentTime >= this.audio.duration &&
+        !this.audio.paused
+      ) {
+        this.handleTrackEnded();
+        return;
+      }
+      this.notify();
+    });
     this.audio.addEventListener('ended', () => this.handleTrackEnded());
     this.audio.addEventListener('play', () => {
       if (this.currentTrack) {
@@ -264,25 +274,9 @@ class AudioServiceManager {
       return;
     }
 
-    if (this.currentTrack) {
-      this.currentTrack.isPlaying = false;
-      const track = this.currentTrack;
-
-      // Auto dismiss snippet / challenge audio after brief delay so it doesn't linger on screen
-      if (
-        track.title.includes('Tantangan') ||
-        track.title.includes('Latihan') ||
-        (!track.isFullSurah && track.type === 'quran' && this.playlist.length === 0)
-      ) {
-        setTimeout(() => {
-          if (this.currentTrack === track && !this.currentTrack.isPlaying) {
-            this.stop();
-          }
-        }, 1000);
-      }
-
-      this.notify();
-    }
+    // Audio finished naturally with no loop or next track:
+    // Immediately stop so currentTrack resets to null and floating player disappears automatically
+    this.stop();
   }
 
   playQuranVerse(url: string, title: string, subtitle: string, surahNumber?: number, ayahNumber?: number) {

@@ -191,6 +191,7 @@ export const QuranGamesView: React.FC<QuranGamesViewProps> = ({
 
   const handleCheckAnswer = () => {
     if (isChecked) return;
+    audioService.stop();
     const q = questions[currentIdx];
     let isCorrect = false;
 

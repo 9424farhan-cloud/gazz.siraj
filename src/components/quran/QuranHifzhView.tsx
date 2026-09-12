@@ -231,6 +231,7 @@ export const QuranHifzhView: React.FC<QuranHifzhViewProps> = ({
 
   const handleCheckAnswer = () => {
     if (isAnswerChecked) return;
+    audioService.stop();
 
     const currentQ = questions[currentQuestionIndex];
     let isCorrect = false;
