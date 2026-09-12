@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Compass, Sparkles, Moon, LogIn } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import welcomeBg from '../../assets/welcome-cosmic.jpg';
 
 interface WelcomeScreenProps {
   onEnter: (targetTab?: string) => void;
@@ -75,7 +76,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
           }`}
         >
           <img
-            src="/welcome-cosmic.jpg"
+            src={welcomeBg}
             alt="SIRAJ Islamic Cosmic Background"
             className="w-full h-full object-cover object-center pointer-events-none select-none"
             loading="eager"

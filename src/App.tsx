@@ -97,9 +97,8 @@ export const AppContent: React.FC = () => {
   const [isGuestMode, setIsGuestMode] = useState<boolean>(() =>
     sessionStorage.getItem('SIRAJ_GUEST_MODE') === 'true'
   );
-  const [showWelcome, setShowWelcome] = useState<boolean>(() =>
-    sessionStorage.getItem('SIRAJ_WELCOME_DISMISSED') !== 'true'
-  );
+  // Always active on app entry so users get the "Ketuk untuk Masuk" welcome experience
+  const [showWelcome, setShowWelcome] = useState<boolean>(true);
 
   useEffect(() => {
     const handleGuestMode = () => setIsGuestMode(true);
@@ -112,12 +111,7 @@ export const AppContent: React.FC = () => {
     };
   }, []);
 
-  // Wait for Firebase to resolve auth state (keeps index.html splash visible)
-  // Also wait for redirect result processing on mobile
-  if (loading) return null;
-
   const handleEnterFromWelcome = (targetTab?: string) => {
-    sessionStorage.setItem('SIRAJ_WELCOME_DISMISSED', 'true');
     sessionStorage.setItem('SIRAJ_GUEST_MODE', 'true');
     setIsGuestMode(true);
     setShowWelcome(false);
@@ -129,12 +123,19 @@ export const AppContent: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      {showWelcome && <WelcomeScreen onEnter={handleEnterFromWelcome} />}
-      {!user && !isGuestMode ? <LoginScreen /> : <MainApp />}
-    </>
-  );
+  // 1. Welcome Screen (Entry Screen) - appears immediately on app open/entry
+  if (showWelcome) {
+    return <WelcomeScreen onEnter={handleEnterFromWelcome} />;
+  }
+
+  // 2. Splash Screen / Loading (waits for auth resolution if needed)
+  if (loading) return null;
+
+  // 3. Login Screen (if not authenticated and not guest mode)
+  if (!user && !isGuestMode) return <LoginScreen />;
+
+  // 4. Main App
+  return <MainApp />;
 };
 
 // MainApp: the full app (all hooks live here, no conditional before them)
