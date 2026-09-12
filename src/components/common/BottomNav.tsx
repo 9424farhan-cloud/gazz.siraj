@@ -3,6 +3,7 @@ import {
   Home,
   Clock,
   BookOpen,
+  Gamepad2,
   Heart,
   BarChart3,
   Radio,
@@ -33,7 +34,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
   ];
 
   const SECONDARY_NAV = [
-    { id: 'quran', label: 'Al-Qur\'an', icon: BookOpen },
+    { id: 'quran', label: "Qur'an Center", icon: BookOpen },
+    { id: 'games', label: "Qur'an Games", icon: Gamepad2 },
     { id: 'radio', label: 'Audio & Radio', icon: Radio },
     { id: 'qibla', label: 'Arah Kiblat', icon: Compass },
     { id: 'mosque', label: 'Masjid Terdekat', icon: MapPin },

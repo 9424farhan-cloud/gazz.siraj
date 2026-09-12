@@ -3,6 +3,7 @@ import {
   Home,
   Clock,
   BookOpen,
+  Gamepad2,
   Heart,
   BarChart3,
   Radio,
@@ -32,7 +33,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onTog
   const MENU_ITEMS = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'prayer', label: 'Prayer', icon: Clock },
-    { id: 'quran', label: 'Quran', icon: BookOpen },
+    { id: 'quran', label: "Qur'an Center", icon: BookOpen },
+    { id: 'games', label: "Qur'an Games", icon: Gamepad2 },
     { id: 'worship', label: 'Worship', icon: Heart },
     { id: 'progress', label: 'Progress', icon: BarChart3 },
     { id: 'divider-1', isDivider: true },

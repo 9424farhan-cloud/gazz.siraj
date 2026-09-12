@@ -9,6 +9,7 @@ import {
   Clock,
   Circle,
   BookOpen,
+  Gamepad2,
   Radio,
   CircleDot,
   Heart,
@@ -113,6 +114,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const QUICK_ACCESS_ITEMS = [
     { id: 'quran', title: 'Quran', icon: BookOpen, color: 'text-emerald-400 bg-emerald-500/20 border-emerald-500/30' },
+    { id: 'games', title: 'Games', icon: Gamepad2, color: 'text-rose-400 bg-rose-500/20 border-rose-500/30' },
     { id: 'radio', title: 'Audio', icon: Radio, color: 'text-purple-400 bg-purple-500/20 border-purple-500/30' },
     { id: 'qibla', title: 'Qibla', icon: Compass, color: 'text-cyan-400 bg-cyan-500/20 border-cyan-500/30' },
     { id: 'mosque', title: 'Mosques', icon: MapPin, color: 'text-blue-400 bg-blue-500/20 border-blue-500/30' },

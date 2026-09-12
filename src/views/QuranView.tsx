@@ -50,14 +50,24 @@ import { QuranGamesView } from '../components/quran/QuranGamesView';
 import { QuranJourneyView } from '../components/quran/QuranJourneyView';
 import { QuranProgressStatsView } from '../components/quran/QuranProgressStatsView';
 
-export const QuranView: React.FC = () => {
+interface QuranViewProps {
+  initialSubTab?: QuranCenterTab;
+}
+
+export const QuranView: React.FC<QuranViewProps> = ({ initialSubTab }) => {
   const { showToast } = useToast();
   const { playTrack, playFullSurah, currentTrack, isPlaying, togglePlayPause } = useAudio();
 
   // Navigation & Juz state
-  const [activeSubTab, setActiveSubTab] = useState<QuranCenterTab>('hub');
+  const [activeSubTab, setActiveSubTab] = useState<QuranCenterTab>(initialSubTab || 'hub');
   const [selectedJuzNumber, setSelectedJuzNumber] = useState<number>(() => quranCenterRepository.getSelectedJuz());
   const [isJuzModalOpen, setIsJuzModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialSubTab) {
+      setActiveSubTab(initialSubTab);
+    }
+  }, [initialSubTab]);
 
   // Progress & Data Maps
   const [juzProgressMap, setJuzProgressMap] = useState<Record<number, QuranJuzProgress>>({});

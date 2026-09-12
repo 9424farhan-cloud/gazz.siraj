@@ -147,7 +147,7 @@ const MainApp: React.FC = () => {
   useEffect(() => {
     const syncTabFromHash = () => {
       const hash = window.location.hash.replace('#', '').replace('/', '').trim();
-      const validTabs = ['home', 'prayer', 'worship', 'quran', 'radio', 'qibla', 'mosque', 'infak', 'progress', 'tasbih', 'doa', 'calendar', 'settings'];
+      const validTabs = ['home', 'prayer', 'worship', 'quran', 'games', 'radio', 'qibla', 'mosque', 'infak', 'progress', 'tasbih', 'doa', 'calendar', 'settings'];
       if (validTabs.includes(hash)) {
         setActiveTabState(hash);
       } else {
@@ -226,7 +226,9 @@ const MainApp: React.FC = () => {
 
           {activeTab === 'worship' && <WorshipView />}
 
-          {activeTab === 'quran' && <QuranView />}
+          {(activeTab === 'quran' || activeTab === 'games') && (
+            <QuranView initialSubTab={activeTab === 'games' ? 'games' : undefined} />
+          )}
 
           {activeTab === 'radio' && <RadioView />}
 
