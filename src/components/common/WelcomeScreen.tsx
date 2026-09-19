@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Compass, Sparkles, Moon, LogIn, ChevronRight, ShieldCheck } from 'lucide-react';
+import { BookOpen, Sparkles, Moon, LogIn, ChevronRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import welcomeLandscapeImg from '../../assets/welcome-landscape.jpg';
 
@@ -300,96 +300,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 </button>
               </div>
 
-              {/* Quick Jump Divider */}
-              <div className="w-full flex items-center gap-3 my-2.5 sm:my-3.5 landscape:my-1.5">
-                <div className="flex-1 h-px bg-slate-800" />
-                <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                  Atau Buka Langsung
+              {/* Spiritual Peaceful Blessing Hint inside card */}
+              <div className="w-full flex items-center justify-center gap-2 mt-3 sm:mt-4 pt-3 border-t border-emerald-500/20 text-center">
+                <span className="text-[11px] sm:text-xs text-emerald-200/80 font-light tracking-wider">
+                  ✦ Bismillah, awali harimu dengan cahaya Al-Qur'an ✦
                 </span>
-                <div className="flex-1 h-px bg-slate-800" />
-              </div>
-
-              {/* 2x2 Feature Shortcuts Grid */}
-              <div className="w-full grid grid-cols-2 gap-2 sm:gap-2.5 landscape:gap-1.5">
-                {/* 1. Al-Qur'an */}
-                <button
-                  onClick={(e) => handleEnterApp(e, 'quran')}
-                  className="group flex flex-col p-2 sm:p-2.5 landscape:p-1.5 rounded-xl landscape:rounded-lg bg-slate-900/70 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 transition-all text-left"
-                  title="Buka Qur'an Center Langsung"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-300 group-hover:scale-110 transition-transform">
-                      <BookOpen className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-amber-300 transition" />
-                  </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-200 group-hover:text-amber-300 transition">
-                    Al-Qur'an
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] text-slate-400 truncate">
-                    30 Juz & Audio
-                  </span>
-                </button>
-
-                {/* 2. Ibadah & Shalat */}
-                <button
-                  onClick={(e) => handleEnterApp(e, 'worship')}
-                  className="group flex flex-col p-2 sm:p-2.5 landscape:p-1.5 rounded-xl landscape:rounded-lg bg-slate-900/70 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 transition-all text-left"
-                  title="Buka Ibadah & Jadwal Shalat"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-emerald-400/15 border border-emerald-400/30 flex items-center justify-center text-emerald-300 group-hover:scale-110 transition-transform">
-                      <Moon className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-emerald-300 transition" />
-                  </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-200 group-hover:text-emerald-300 transition">
-                    Ibadah
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] text-slate-400 truncate">
-                    Shalat & Kiblat
-                  </span>
-                </button>
-
-                {/* 3. Qur'an Journey */}
-                <button
-                  onClick={(e) => handleEnterApp(e, 'journey')}
-                  className="group flex flex-col p-2 sm:p-2.5 landscape:p-1.5 rounded-xl landscape:rounded-lg bg-slate-900/70 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 transition-all text-left"
-                  title="Buka Qur'an Journey"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-teal-400/15 border border-teal-400/30 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform">
-                      <Compass className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-teal-300 transition" />
-                  </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-200 group-hover:text-teal-300 transition">
-                    Journey
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] text-slate-400 truncate">
-                    Petualangan Juz
-                  </span>
-                </button>
-
-                {/* 4. Galaxy & Progress */}
-                <button
-                  onClick={(e) => handleEnterApp(e, 'progress')}
-                  className="group flex flex-col p-2 sm:p-2.5 landscape:p-1.5 rounded-xl landscape:rounded-lg bg-slate-900/70 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 transition-all text-left"
-                  title="Buka Statistik Galaxy"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="w-6 sm:w-7 h-6 sm:h-7 rounded-lg bg-purple-400/15 border border-purple-400/30 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform">
-                      <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-purple-300 transition" />
-                  </div>
-                  <span className="text-[11px] sm:text-xs font-bold text-slate-200 group-hover:text-purple-300 transition">
-                    Galaxy
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] text-slate-400 truncate">
-                    Progress & XP
-                  </span>
-                </button>
               </div>
             </div>
           </div>
