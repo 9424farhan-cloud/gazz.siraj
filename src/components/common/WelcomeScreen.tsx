@@ -79,9 +79,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#04060f]/75 via-transparent to-[#04060f]/90" />
 
       {/* Dynamic Nebulae Glow */}
-      <div className="absolute top-10 left-10 w-[500px] h-[350px] rounded-full bg-purple-600/15 blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[600px] h-[400px] rounded-full bg-emerald-500/15 blur-[150px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[400px] h-[300px] rounded-full bg-amber-500/10 blur-[130px] pointer-events-none" />
+      <div className="absolute top-10 left-10 w-[500px] h-[350px] rounded-full bg-purple-600/25 blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[600px] h-[400px] rounded-full bg-indigo-600/20 blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[400px] h-[300px] rounded-full bg-violet-500/15 blur-[130px] pointer-events-none" />
 
       {/* 3. Twinkling Cosmic Stars */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -107,16 +107,16 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       {/* 4. Landscape Header Bar */}
       <header className="relative z-20 w-full px-4 sm:px-8 lg:px-12 pt-3 sm:pt-6 landscape:pt-2 flex items-center justify-between flex-shrink-0">
         {/* Left: Brand Badge */}
-        <div className="flex items-center gap-3 bg-slate-950/50 backdrop-blur-md px-3 sm:px-3.5 py-1.5 rounded-2xl border border-amber-400/25 shadow-lg shadow-black/40">
-          <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600 rounded-full" />
-          <div className="flex flex-col text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-amber-200/90 leading-tight">
-            <span className="font-extrabold text-amber-300">SIRAJ</span>
+        <div className="flex items-center gap-3 bg-slate-950/50 backdrop-blur-md px-3 sm:px-3.5 py-1.5 rounded-2xl border border-purple-400/30 shadow-lg shadow-purple-950/40">
+          <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-purple-300 via-violet-400 to-indigo-500 rounded-full" />
+          <div className="flex flex-col text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-purple-200/90 leading-tight">
+            <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-amber-300">SIRAJ</span>
             <span className="text-[9px] text-slate-300 tracking-wider">Islamic Companion</span>
           </div>
         </div>
 
         {/* Center: Arabic Calligraphy Basmalah with luminous glow */}
-        <div className="flex items-center gap-2 px-3 sm:px-4 py-1 rounded-full bg-emerald-950/30 border border-emerald-500/20 backdrop-blur-md shadow-md">
+        <div className="flex items-center gap-2 px-3 sm:px-4 py-1 rounded-full bg-purple-950/40 border border-purple-500/30 backdrop-blur-md shadow-md shadow-purple-950/40">
           <span
             className="text-amber-200/95 text-sm sm:text-xl lg:text-2xl font-arabic tracking-wide drop-shadow-[0_2px_12px_rgba(245,158,11,0.4)] select-none"
             style={{ fontFamily: 'Amiri, serif' }}
@@ -138,8 +138,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               <span className="hidden sm:inline">Masuk Akun</span>
             </button>
           ) : (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-emerald-500/30 text-xs text-emerald-200 backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-purple-500/30 text-xs text-purple-200 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
               <span className="max-w-[120px] truncate font-medium">{user.displayName || 'Tersambung'}</span>
             </div>
           )}
@@ -154,33 +154,33 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
           <div className="md:col-span-7 landscape:col-span-7 flex flex-col items-center md:items-start landscape:items-start text-center md:text-left landscape:text-left space-y-2 sm:space-y-4 landscape:space-y-1.5">
             
             {/* Spiritual Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-emerald-500/15 to-transparent border border-amber-400/30 backdrop-blur-md text-amber-200 text-[10px] sm:text-xs font-medium tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-purple-500/25 via-violet-500/20 to-transparent border border-purple-400/35 backdrop-blur-md text-purple-200 text-[10px] sm:text-xs font-medium tracking-wide">
+              <Sparkles className="w-3.5 h-3.5 text-purple-300 animate-pulse" />
               <span>Lentera Cahaya Harian Muslim Indonesia</span>
             </div>
 
             {/* Brand Title: SIRAJ */}
             <div>
               <h1
-                className="text-4xl sm:text-6xl md:text-6xl lg:text-8xl landscape:text-4xl lg:landscape:text-7xl font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-b from-white via-amber-200 to-amber-500 drop-shadow-[0_4px_35px_rgba(245,158,11,0.5)] leading-tight"
+                className="text-4xl sm:text-6xl md:text-6xl lg:text-8xl landscape:text-4xl lg:landscape:text-7xl font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-200 to-amber-400 drop-shadow-[0_4px_35px_rgba(168,85,247,0.5)] leading-tight"
                 style={{ fontFamily: 'serif' }}
               >
                 S I R A J
               </h1>
-              <p className="text-[11px] sm:text-sm lg:text-base landscape:text-[11px] font-light tracking-[0.35em] uppercase text-amber-100/90 mt-0.5 sm:mt-1">
+              <p className="text-[11px] sm:text-sm lg:text-base landscape:text-[11px] font-light tracking-[0.35em] uppercase text-purple-100/90 mt-0.5 sm:mt-1">
                 Your Islamic Digital Companion
               </p>
             </div>
 
             {/* Golden Divider with Star */}
             <div className="flex items-center gap-3 w-40 sm:w-64 my-0.5 sm:my-1">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-amber-400" />
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-purple-400" />
               <span className="text-amber-300 text-xs drop-shadow-[0_0_8px_rgba(251,191,36,0.9)]">✦</span>
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-amber-400/60 to-amber-400" />
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-purple-400/60 to-purple-400" />
             </div>
 
             {/* Inspiring Ayah & Tagline */}
-            <blockquote className="max-w-xl text-xs sm:text-sm lg:text-base landscape:text-xs text-sky-100/90 font-light leading-relaxed italic drop-shadow bg-slate-950/30 md:bg-transparent landscape:bg-transparent p-2.5 sm:p-3 md:p-0 landscape:p-0 rounded-2xl border border-white/5 md:border-none landscape:border-none">
+            <blockquote className="max-w-xl text-xs sm:text-sm lg:text-base landscape:text-xs text-purple-100/90 font-light leading-relaxed italic drop-shadow bg-slate-950/30 md:bg-transparent landscape:bg-transparent p-2.5 sm:p-3 md:p-0 landscape:p-0 rounded-2xl border border-white/5 md:border-none landscape:border-none">
               “Dan sebutlah nama Tuhanmu pada waktu pagi dan petang.”
               <span className="block text-[10px] sm:text-xs text-amber-300/80 not-italic font-normal mt-0.5 sm:mt-1">
                 QS. Al-Insan: 25 • Perjalanan berkah dimulai dari satu langkah istiqomah
@@ -189,16 +189,16 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
             {/* Feature Highlights Pills */}
             <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-0.5 sm:pt-1 justify-center md:justify-start landscape:justify-start">
-              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-emerald-500/20 text-emerald-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
-                <BookOpen className="w-3 h-3 text-emerald-400" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-purple-500/30 text-purple-200 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
+                <BookOpen className="w-3 h-3 text-purple-400" />
                 Al-Qur'an 30 Juz & Audio
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-amber-500/20 text-amber-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-amber-500/25 text-amber-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
                 <Moon className="w-3 h-3 text-amber-400" />
                 Jadwal Shalat & Arah Kiblat
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-cyan-500/20 text-cyan-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
-                <ShieldCheck className="w-3 h-3 text-cyan-400" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/60 border border-violet-500/30 text-violet-200 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
+                <ShieldCheck className="w-3 h-3 text-violet-400" />
                 Offline-First PWA
               </span>
             </div>
@@ -206,54 +206,55 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
 
           {/* RIGHT COLUMN: Interactive Entry Hub & Quick Portals */}
           <div className="md:col-span-5 landscape:col-span-5 flex flex-col items-center justify-center">
-            <div className="w-full max-w-md backdrop-blur-2xl bg-slate-950/65 border border-emerald-500/30 rounded-3xl landscape:rounded-2xl p-4 sm:p-6 lg:p-7 landscape:p-3.5 shadow-[0_15px_50px_rgba(0,0,0,0.7)] relative overflow-hidden flex flex-col items-center">
+            <div className="w-full max-w-md backdrop-blur-2xl bg-[#0d0e26]/80 border border-purple-500/40 rounded-3xl landscape:rounded-2xl p-4 sm:p-6 lg:p-7 landscape:p-3.5 shadow-[0_15px_60px_rgba(124,58,237,0.4)] relative overflow-hidden flex flex-col items-center">
               
               {/* Subtle Card Glow Highlight */}
-              <div className="absolute -top-20 -right-20 w-44 h-44 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-20 -left-20 w-44 h-44 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
+              <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-purple-600/25 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-indigo-600/20 blur-3xl pointer-events-none" />
 
               {/* Portal Header */}
-              <div className="flex items-center justify-between w-full mb-2.5 sm:mb-4 landscape:mb-2 pb-2 sm:pb-3 landscape:pb-1.5 border-b border-emerald-500/20">
+              <div className="flex items-center justify-between w-full mb-2.5 sm:mb-4 landscape:mb-2 pb-2 sm:pb-3 landscape:pb-1.5 border-b border-purple-500/25">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-200">
+                  <div className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.9)] animate-pulse" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-200">
                     Gerbang Utama
                   </span>
                 </div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-widest">
-                  Akses Cepat
+                <span className="text-[10px] uppercase font-semibold text-purple-300/70 tracking-widest">
+                  Akses Masuk
                 </span>
               </div>
 
               {/* Primary Entrance Button Container with Glowing Pulse Waves */}
               <div className="relative w-full flex items-center justify-center my-1.5 sm:my-2 landscape:my-1">
-                {/* Concentric Pulse Waves */}
+                {/* Concentric Cosmic Pulse Waves */}
                 <div
-                  className="absolute inset-0 -m-3 rounded-full border border-emerald-400/25 animate-ping pointer-events-none opacity-40"
+                  className="absolute inset-0 -m-3 rounded-full border border-purple-400/30 animate-ping pointer-events-none opacity-50"
                   style={{ animationDuration: '3s' }}
                 />
                 <div
-                  className="absolute inset-0 -m-1.5 rounded-full border border-teal-300/35 pointer-events-none animate-pulse"
+                  className="absolute inset-0 -m-1.5 rounded-full border border-violet-300/40 pointer-events-none animate-pulse"
                   style={{ animationDuration: '2s' }}
                 />
+                <div className="absolute w-4/5 h-12 rounded-full bg-gradient-to-r from-purple-600/35 via-violet-500/35 to-indigo-600/35 blur-xl pointer-events-none" />
 
                 {/* Primary Button */}
                 <button
                   id="btn-welcome-enter"
                   onClick={(e) => handleEnterApp(e, 'home')}
                   className={`group relative w-full overflow-hidden flex items-center justify-between px-4 sm:px-8 landscape:px-4 py-3 sm:py-4 landscape:py-2.5 rounded-2xl landscape:rounded-xl font-extrabold transition-all duration-300 active:scale-95 shadow-2xl cursor-pointer ${
-                    rippleActive ? 'ring-4 ring-emerald-400/70 scale-95' : 'hover:scale-[1.02] hover:shadow-emerald-500/30'
+                    rippleActive ? 'ring-4 ring-purple-400/80 scale-95' : 'hover:scale-[1.02] hover:shadow-purple-500/40'
                   }`}
                   style={{
-                    background: 'linear-gradient(135deg, rgba(6, 78, 59, 0.9), rgba(13, 148, 136, 0.75), rgba(15, 23, 42, 0.9))',
-                    border: '1.5px solid rgba(52, 211, 153, 0.8)',
-                    boxShadow: '0 0 40px rgba(16, 185, 129, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3)',
+                    background: 'linear-gradient(135deg, rgba(88, 28, 135, 0.95), rgba(124, 58, 237, 0.9), rgba(49, 46, 129, 0.95))',
+                    border: '1.5px solid rgba(192, 132, 252, 0.85)',
+                    boxShadow: '0 0 45px rgba(147, 51, 234, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.35)',
                   }}
                 >
                   {/* Ripple Animation */}
                   {rippleActive && (
                     <span
-                      className="absolute rounded-full bg-emerald-300/50 pointer-events-none animate-ping"
+                      className="absolute rounded-full bg-purple-300/60 pointer-events-none animate-ping"
                       style={{
                         left: `${ripplePos.x}%`,
                         top: `${ripplePos.y}%`,
@@ -268,9 +269,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
 
                   {/* Left Touch Icon */}
-                  <div className="w-8 sm:w-10 h-8 sm:h-10 landscape:w-8 landscape:h-8 rounded-xl bg-gradient-to-tr from-emerald-500/60 to-teal-300/60 border border-emerald-300/80 flex items-center justify-center flex-shrink-0 text-white shadow-inner group-hover:scale-110 transition-transform">
+                  <div className="w-8 sm:w-10 h-8 sm:h-10 landscape:w-8 landscape:h-8 rounded-xl bg-gradient-to-tr from-purple-500/70 via-violet-500/70 to-indigo-400/70 border border-purple-300/80 flex items-center justify-center flex-shrink-0 text-white shadow-inner group-hover:scale-110 transition-transform">
                     <svg
-                      className="w-4 sm:w-5 h-4 sm:h-5 landscape:w-4 landscape:h-4 text-emerald-100 animate-pulse"
+                      className="w-4 sm:w-5 h-4 sm:h-5 landscape:w-4 landscape:h-4 text-purple-100 animate-pulse"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -290,19 +291,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                     <span className="text-white text-sm sm:text-lg landscape:text-sm font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                       KETUK UNTUK MASUK
                     </span>
-                    <span className="text-[9px] sm:text-[10px] landscape:text-[9px] text-emerald-200/80 font-normal">
+                    <span className="text-[9px] sm:text-[10px] landscape:text-[9px] text-purple-200/90 font-normal">
                       Buka beranda utama Siraj
                     </span>
                   </div>
 
                   {/* Right Arrow */}
-                  <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5 text-emerald-300 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                  <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5 text-purple-200 group-hover:translate-x-1 group-hover:text-white transition-transform flex-shrink-0" />
                 </button>
               </div>
 
               {/* Spiritual Peaceful Blessing Hint inside card */}
-              <div className="w-full flex items-center justify-center gap-2 mt-3 sm:mt-4 pt-3 border-t border-emerald-500/20 text-center">
-                <span className="text-[11px] sm:text-xs text-emerald-200/80 font-light tracking-wider">
+              <div className="w-full flex items-center justify-center gap-2 mt-3 sm:mt-4 pt-3 border-t border-purple-500/25 text-center">
+                <span className="text-[11px] sm:text-xs text-purple-200/90 font-light tracking-wider">
                   ✦ Bismillah, awali harimu dengan cahaya Al-Qur'an ✦
                 </span>
               </div>
