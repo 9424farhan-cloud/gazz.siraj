@@ -74,7 +74,8 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const displayName = user?.displayName || 'Akhi';
+  const isGuest = !user || user.isAnonymous;
+  const displayName = isGuest ? 'Akhi' : (user.displayName || 'Akhi');
   const firstName = displayName.split(' ')[0];
 
   return (
